@@ -10,7 +10,7 @@ def PeakPenaltyReward(env, current_step, user_satisfaction_list, beta=100, *args
     if current_step == 0: return reward # no way to calculate derivative with one value
 
     # TODO: check if: might alter beta to a negative value if the reward turns out to be positive
-    reward += beta * (env.current_power_usage[current_step] - env.current_power_usage[current_step])
+    reward += beta * (env.current_power_usage[current_step] - env.current_power_usage[current_step - 1])
 
     for score in user_satisfaction_list: # penalize user dissatisfaction
         reward -= 1000 * (1 - score)

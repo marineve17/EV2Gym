@@ -4,6 +4,19 @@
 import math
 import numpy as np
 
+def PeakPenaltyReward(env, current_step, user_satisfaction_list, beta=100, *args):
+    reward = 0
+
+    if current_step == 0: return reward # no way to calculate derivative with one value
+
+    # TODO: check if: might alter beta to a negative value if the reward turns out to be positive
+    reward += beta * (env.current_power_usage[current_step] - env.current_power_usage[current_step])
+
+    for score in user_satisfaction_list: # penalize user dissatisfaction
+        reward -= 1000 * (1 - score)
+
+    return reward
+
 def SquaredTrackingErrorReward(env,*args):
     '''This reward function is the squared tracking error that uses the minimum of the power setpoints and the charge power potential
     The reward is negative'''

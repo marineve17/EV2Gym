@@ -425,9 +425,7 @@ class EV2Gym(gym.Env):
 
         self.current_evs_parked += self.current_ev_arrived - self.current_ev_departed
 
-        reward = self._calculate_reward(total_costs,
-                                        user_satisfaction_list,
-                                        total_invalid_action_punishment)
+        reward = self._calculate_reward(user_satisfaction_list)
 
         if self.cost_function is not None:
             cost = self.cost_function(self,
@@ -574,11 +572,12 @@ class EV2Gym(gym.Env):
         '''
         self.reward_function = reward_function
 
-    def _calculate_reward(self, total_costs, user_satisfaction_list, invalid_action_punishment):
+    def _calculate_reward(self, user_satisfaction_list):
         '''Calculates the reward for the current step'''
+        reward = self.reward_function(self, user_satisfaction_list)
 
-        reward = self.reward_function(
-            self, total_costs, user_satisfaction_list, invalid_action_punishment)
+        # reward = self.reward_function(
+        #     self, total_costs, user_satisfaction_list, invalid_action_punishment)
         self.total_reward += reward
 
         return reward

@@ -3,14 +3,16 @@
 
 import math
 import numpy as np
+import logging
 
-def PeakPenaltyReward(env, current_step, user_satisfaction_list, beta=100, *args):
+def PeakPenaltyReward(env, user_satisfaction_list, beta=100, *args):
     reward = 0
 
-    if current_step == 0: return reward # no way to calculate derivative with one value
+    # current_step starts at 1, not 0. we want to check index 0 in array
+    if env.current_step == 1: return reward # no way to calculate derivative with one value
 
     # TODO: check if: might alter beta to a negative value if the reward turns out to be positive
-    reward += beta * (env.current_power_usage[current_step] - env.current_power_usage[current_step])
+    reward += float(beta) * float(env.current_power_usage[env.current_step - 1]) - float(env.current_power_usage[env.current_step - 2])
 
     for score in user_satisfaction_list: # penalize user dissatisfaction
         reward -= 1000 * (1 - score)
